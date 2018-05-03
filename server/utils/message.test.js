@@ -1,5 +1,5 @@
 const expect = require('expect');
-const {generateMessage} = require('./message')
+const { generateMessage } = require('./message');
 
 describe('generateMessage', () => {
   it('should generate correct message object', () => {
@@ -8,6 +8,6 @@ describe('generateMessage', () => {
     let message = generateMessage(from, text);
 
     expect(typeof message.createdAt).toBe('number');
-    expect(message).toMatchObject({ from, text })
+    expect(message).toMatchObject({ from, text });
   });
 });
