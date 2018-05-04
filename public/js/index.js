@@ -9,28 +9,29 @@ socket.on('disconnect', () => {
 });
 
 socket.on('newMessage', message => {
-  console.log('NewMessage', message);
   let formattedTime = moment(message.createdAt).format('h:mm a');
-  let li = $('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
-
-  $('#messages').append(li);
+  let template = $('#message-template').html();
+  let html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  $('#messages').append(html);
 });
 
 socket.on('newLocationMessage', (message) => {
   let formattedTime = moment(message.createdAt).format('h:mm a')
-  let li = $('<li></li>');
-  let a = $('<a target="_blank">My Current Location</a>')
-
-  li.text(`${message.from} ${formattedTime}: `);
-  a.attr('href', message.url);
-  li.append(a);
-  $('#messages').append(li);
+  let template = $('#location-message-template').html();
+  let html = Mustache.render(template, {
+    from: message.from,
+    url: message.url,
+    createdAt: formattedTime
+  })
+  $('#messages').append(html);
 });
 
 $('#message-form').on('submit', (e) => {
   e.preventDefault();
-
   let messageTextbox = $('[name=message]');
 
   socket.emit('createMessage', {
