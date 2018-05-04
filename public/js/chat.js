@@ -19,12 +19,30 @@ const scrollToBottom = () => {
 }
 
 socket.on('connect', () => {
-  console.log('connected to server');
+  let params = $.deparam(window.location.search);
+
+  socket.emit('join', params, (err) => {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No error');
+    }
+  })
 });
 
 socket.on('disconnect', () => {
   console.log('disconnected from server');
 });
+
+socket.on('updateUserList', (users) => {
+  let ol = $('<ol></ol>');
+
+  users.forEach(user => {
+    ol.append($('<li></li>').text(user));
+  })
+  $('#users').html(ol)
+})
 
 socket.on('newMessage', message => {
   let formattedTime = moment(message.createdAt).format('h:mm a');
@@ -59,8 +77,8 @@ $('#message-form').on('submit', (e) => {
     text: messageTextbox.val()
   }, () => {
     messageTextbox.val('');
-  })
-})
+  });
+});
 
 let locationButton = $('#send-location');
 locationButton.on('click', () => {
