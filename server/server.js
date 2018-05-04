@@ -29,12 +29,6 @@ io.on('connection', (socket) => {
     users.addUser(socket.id, params.name, params.room);
 
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-    // socket.leave()
-
-    // io.emit -> io.to('the room').emit
-    // socket.broadcast.emit -> socket.broadcast.to('the room').emit
-    // socket.emit
-
     socket.emit(
       'newMessage',
       generateMessage('Admin', 'Welcome to the chat app')
@@ -44,7 +38,7 @@ io.on('connection', (socket) => {
       .to(params.room)
       .emit(
         'newMessage',
-        generateMessage('Admin', `${params.name} has joined.`)
+        generateMessage('Admin', `${params.name} has joined the room.`)
       );
     callback();
   });
@@ -62,7 +56,6 @@ io.on('connection', (socket) => {
 
   socket.on('createLocationMessage', (coords) => {
     let user = users.getUser(socket.id);
-
     if (user) {
       io
         .to(user.room)
@@ -79,7 +72,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     let user = users.removeUser(socket.id);
-
     if (user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
       io
