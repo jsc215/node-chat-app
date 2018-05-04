@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       .to(params.room)
       .emit(
         'newMessage',
-        generateMessage('Admin', `${params.name} has joined the room.`)
+        generateMessage('Admin', `${params.name} has joined the room: ${params.room}`)
       );
     callback();
   });
@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
         .to(user.room)
         .emit(
           'newMessage',
-          generateMessage('Admin', `${user.name} has left the room`)
+          generateMessage('Admin', `${user.name} has left the room: ${user.room}`)
         );
     }
   });
