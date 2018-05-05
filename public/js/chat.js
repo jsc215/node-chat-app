@@ -1,6 +1,5 @@
 const socket = io();
 
-
 const scrollToBottom = () => {
   // Selectors
   let messages = $('#messages');
@@ -15,12 +14,10 @@ const scrollToBottom = () => {
   if ( clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
    messages.scrollTop(scrollHeight)
   }
-
 }
 
 socket.on('connect', () => {
   let params = $.deparam(window.location.search);
-
   socket.emit('join', params, (err) => {
     if (err) {
       alert(err);
@@ -37,7 +34,6 @@ socket.on('disconnect', () => {
 
 socket.on('updateUserList', (users) => {
   let ol = $('<ol></ol>');
-
   users.forEach(user => {
     ol.append($('<li></li>').text(user));
   })
@@ -84,9 +80,7 @@ locationButton.on('click', () => {
   if (!navigator.geolocation) {
     return alert('Geolocation not supported by your browser');
   }
-
   locationButton.attr('disabled', 'disabled').text('Sending Location...');
-
   navigator.geolocation.getCurrentPosition((position) => {
     locationButton.removeAttr('disabled').text('Send location');
     socket.emit('createLocationMessage', {
