@@ -21,6 +21,7 @@ const scrollToBottom = () => {
 
 socket.on('connect', () => {
   let params = $.deparam(window.location.search);
+
   socket.emit('join', params, (err) => {
     if (err) {
       alert(err);
@@ -71,15 +72,9 @@ $('#message-form').on('submit', (e) => {
   e.preventDefault();
   let messageTextbox = $('[name=message]');
 
-  socket.emit(
-    'createMessage',
-    {
-      text: messageTextbox.val()
-    },
-    () => {
-      messageTextbox.val('');
-    }
-  );
+  socket.emit('createMessage', { text: messageTextbox.val() }, () => {
+    messageTextbox.val('');
+  });
 });
 
 let locationButton = $('#send-location');
@@ -91,6 +86,7 @@ locationButton.on('click', () => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       locationButton.removeAttr('disabled').text('Send location');
+
       socket.emit('createLocationMessage', {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude

@@ -21,10 +21,14 @@ io.on('connection', (socket) => {
 
   socket.on('join', (params, callback) => {
     params.room = params.room.toLowerCase();
+
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required');
     }
-
+    if (users.getUserList(params.room).includes(params.name)) {
+      return callback('That name is already taken. Try a different one.');
+    }
+    // the join method in socket.io
     socket.join(params.room);
     users.removeUser(socket.id);
     users.addUser(socket.id, params.name, params.room);
@@ -50,7 +54,6 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (message, callback) => {
     let user = users.getUser(socket.id);
-
     if (user && isRealString(message.text)) {
       io
         .to(user.room)
