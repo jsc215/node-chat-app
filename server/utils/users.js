@@ -1,10 +1,10 @@
-[
-  {
-    id: '/#dadfafdfdfa',
-    name: 'Jeff',
-    room: 'The best room ever'
-  }
-];
+// [
+//   {
+//     id: '/#dadfafdfdfa',
+//     name: 'Jeff',
+//     room: 'The best room ever'
+//   }
+// ];
 
 class Users {
   constructor() {

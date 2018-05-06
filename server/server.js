@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
   console.log('new user connected');
 
   socket.on('join', (params, callback) => {
+    params.room = params.room.toLowerCase();
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required');
     }
@@ -29,6 +30,7 @@ io.on('connection', (socket) => {
     users.addUser(socket.id, params.name, params.room);
 
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
     socket.emit(
       'newMessage',
       generateMessage('Admin', 'Welcome to the chat app')
@@ -38,7 +40,10 @@ io.on('connection', (socket) => {
       .to(params.room)
       .emit(
         'newMessage',
-        generateMessage('Admin', `${params.name} has joined the room: ${params.room}`)
+        generateMessage(
+          'Admin',
+          `${params.name} has joined the room: ${params.room}`
+        )
       );
     callback();
   });
@@ -78,7 +83,10 @@ io.on('connection', (socket) => {
         .to(user.room)
         .emit(
           'newMessage',
-          generateMessage('Admin', `${user.name} has left the room: ${user.room}`)
+          generateMessage(
+            'Admin',
+            `${user.name} has left the room: ${user.room}`
+          )
         );
     }
   });
