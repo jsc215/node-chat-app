@@ -42,13 +42,7 @@ io.on('connection', (socket) => {
 
     socket.broadcast
       .to(params.room)
-      .emit(
-        'newMessage',
-        generateMessage(
-          'Admin',
-          `${params.name} has joined the room: ${params.room}`
-        )
-      );
+      .emit('newMessage', generateMessage('Admin',`${params.name} has joined the room: ${params.room}` ));
     callback();
   });
 
